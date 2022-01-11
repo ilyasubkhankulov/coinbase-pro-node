@@ -102,7 +102,7 @@
     "test": "nyc --nycrc-path=nyc.config.coverage.json jasmine --config=jasmine.json",
     "test:dev": "nyc --nycrc-path=nyc.config.json jasmine --config=jasmine.json",
     "test:types": "yarn lint:types",
-    "prepare": "husky install"
+    "prepare": "npm run build"
   },
   "version": "3.1.0"
 }
