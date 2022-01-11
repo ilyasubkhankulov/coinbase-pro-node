@@ -12,6 +12,7 @@ export interface Product {
   base_min_size: string;
   cancel_only: boolean;
   display_name: string;
+  fx_stablecoin: boolean;
   id: string;
   limit_only: boolean;
   margin_enabled: boolean;
@@ -24,7 +25,7 @@ export interface Product {
    * increment is 0.01, order prices of 0.001 or 0.021 would be rejected).
    */
   quote_increment: string;
-  status: 'online';
+  status: string;
   status_message: string;
   trading_disabled: boolean;
 }
