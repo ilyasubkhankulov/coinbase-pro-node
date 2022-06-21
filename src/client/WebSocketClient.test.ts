@@ -62,7 +62,9 @@ describe('WebSocketClient', () => {
     it('attaches an error listener', done => {
       const invalidUrl = 'ws://localhost:50001';
       const ws = createWebSocketClient(invalidUrl);
-      ws.on(WebSocketEvent.ON_ERROR, done);
+      ws.on(WebSocketEvent.ON_ERROR, () => {
+        done();
+      });
       ws.connect();
     });
 
@@ -126,7 +128,10 @@ describe('WebSocketClient', () => {
   describe('constructor', () => {
     it('it signals an event when the WebSocket connection is established', done => {
       const ws = createWebSocketClient();
-      ws.on(WebSocketEvent.ON_OPEN, () => done());
+      ws.on(WebSocketEvent.ON_OPEN, async () => {
+        await ws.disconnect();
+        done();
+      });
       ws.connect();
     });
   });
@@ -212,7 +217,9 @@ describe('WebSocketClient', () => {
           ws.disconnect();
         }
       });
-      ws.on(WebSocketEvent.ON_CLOSE, done);
+      ws.on(WebSocketEvent.ON_CLOSE, () => {
+        done();
+      });
       ws.on(WebSocketEvent.ON_MESSAGE_ERROR, (wsError: WebSocketErrorMessage) => done.fail(wsError.message));
       // Send subscription once the WebSocket is ready
       ws.on(WebSocketEvent.ON_OPEN, () => ws.subscribe(channels));
@@ -226,10 +233,10 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, statusPayload);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_STATUS, message => {
+      ws.on(WebSocketEvent.ON_MESSAGE_STATUS, async message => {
         expect(message.currencies[2].details.sort_order).toBe(48);
         expect(message.products[72].id).toBe('XRP-USD');
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -243,9 +250,9 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, tickerBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_TICKER, tickerMessage => {
+      ws.on(WebSocketEvent.ON_MESSAGE_TICKER, async tickerMessage => {
         expect(tickerMessage.trade_id).toBe(3526965);
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -259,11 +266,11 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, l2snapshotBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_L2SNAPSHOT, snapshotMessage => {
+      ws.on(WebSocketEvent.ON_MESSAGE_L2SNAPSHOT, async snapshotMessage => {
         expect<number>(snapshotMessage.asks.length).toBe(10);
         expect(snapshotMessage.asks[0]).toEqual(['47009.28', '0.00100000']);
         expect<number>(snapshotMessage.bids.length).toBe(10);
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -277,11 +284,11 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, l2updateBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_L2UPDATE, updateMessage => {
+      ws.on(WebSocketEvent.ON_MESSAGE_L2UPDATE, async updateMessage => {
         expect<number>(updateMessage.changes.length).toBe(5);
         expect(updateMessage.changes[0]).toEqual(['buy', '46961.95', '0.00000000']);
         expect(updateMessage.changes[1]).toEqual(['sell', '47027.24', '0.04443115']);
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -295,11 +302,11 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, fullActivateBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_FULL_ACTIVATE, message => {
+      ws.on(WebSocketEvent.ON_MESSAGE_FULL_ACTIVATE, async message => {
         expect(message.profile_id).toBe('30000727-d308-cf50-7b1c-c06deb1934fc');
         expect(message.private).toBe(true);
         expect(message.stop_type).toBe('entry');
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -313,10 +320,10 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, fullReceivedLimitBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_FULL_RECEIVED, message => {
+      ws.on(WebSocketEvent.ON_MESSAGE_FULL_RECEIVED, async message => {
         expect(message.order_type).toBe('limit');
         expect(message.order_id).toBe('d50ec984-77a8-460a-b958-66f114b0de9b');
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -330,10 +337,10 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, fullOpenBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_FULL_OPEN, message => {
+      ws.on(WebSocketEvent.ON_MESSAGE_FULL_OPEN, async message => {
         expect(message.profile_id).toBe(undefined);
         expect(message.remaining_size).toBe('1.00');
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -347,11 +354,11 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, fullDoneBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_FULL_DONE, message => {
+      ws.on(WebSocketEvent.ON_MESSAGE_FULL_DONE, async message => {
         expect(message.profile_id).toBe(undefined);
         expect(message.remaining_size).toBe('0');
         expect(message.reason).toBe('filled');
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -365,10 +372,10 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, fullChangeBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_FULL_CHANGE, message => {
+      ws.on(WebSocketEvent.ON_MESSAGE_FULL_CHANGE, async message => {
         expect(message.new_size).toBe('5.23512');
         expect(message.old_size).toBe('12.234412');
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -382,9 +389,9 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channel, tickerBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_TICKER, tickerMessage => {
+      ws.on(WebSocketEvent.ON_MESSAGE_TICKER, async tickerMessage => {
         expect(tickerMessage.trade_id).toBe(3526965);
-        ws.unsubscribe(channel);
+        await ws.unsubscribe(channel);
       });
 
       ws.connect();
@@ -400,9 +407,9 @@ describe('WebSocketClient', () => {
 
       const ws = mockWebSocketResponse(done, channels, matchesBTCUSD);
 
-      ws.on(WebSocketEvent.ON_MESSAGE_MATCHES, message => {
+      ws.on(WebSocketEvent.ON_MESSAGE_MATCHES, async message => {
         expect(message.trade_id).toBe(9713921);
-        ws.unsubscribe(channels);
+        await ws.unsubscribe(channels);
       });
 
       ws.connect();
@@ -429,16 +436,40 @@ describe('WebSocketClient', () => {
 
       const ws = createWebSocketClient();
 
-      ws.on(WebSocketEvent.ON_MESSAGE_ERROR, errorMessage => {
+      ws.on(WebSocketEvent.ON_MESSAGE_ERROR, async errorMessage => {
         expect(errorMessage.type).toBe(WebSocketResponseType.ERROR);
+        await ws.disconnect();
         done();
       });
 
-      ws.on(WebSocketEvent.ON_OPEN, () => {
-        ws.subscribe({
+      ws.on(WebSocketEvent.ON_OPEN, async () => {
+        await ws.subscribe({
           name: WebSocketChannelName.USER,
           product_ids: ['BTC-USD'],
         });
+      });
+
+      ws.connect();
+    });
+
+    it('does not throw an exception when disconnect is called immediately after an awaited subscribe', done => {
+      const ws = createWebSocketClient();
+
+      const channel: WebSocketChannel = {
+        name: WebSocketChannelName.TICKER,
+        product_ids: ['BTC-USD', 'ETH-USD'],
+      };
+
+      ws.on(WebSocketEvent.ON_OPEN, async () => {
+        await ws.subscribe(channel);
+
+        expect(() => {
+          ws.disconnect();
+        }).not.toThrow();
+      });
+
+      ws.on(WebSocketEvent.ON_CLOSE, () => {
+        done();
       });
 
       ws.connect();
@@ -460,13 +491,15 @@ describe('WebSocketClient', () => {
 
       const ws = createWebSocketClient();
 
-      ws.on(WebSocketEvent.ON_SUBSCRIPTION_UPDATE, subscriptions => {
+      ws.on(WebSocketEvent.ON_SUBSCRIPTION_UPDATE, async subscriptions => {
         if (subscriptions.channels.length === 0) {
-          ws.disconnect();
+          await ws.disconnect();
         }
       });
 
-      ws.on(WebSocketEvent.ON_CLOSE, done);
+      ws.on(WebSocketEvent.ON_CLOSE, () => {
+        done();
+      });
 
       ws.on(WebSocketEvent.ON_OPEN, () => ws.unsubscribe(WebSocketChannelName.TICKER));
 
@@ -477,7 +510,8 @@ describe('WebSocketClient', () => {
   describe('setupHeartbeat', () => {
     it('sends ping messages within a defined interval', done => {
       server.on('connection', socket => {
-        socket.on('ping', () => {
+        socket.on('ping', async () => {
+          await ws.disconnect();
           done();
         });
       });

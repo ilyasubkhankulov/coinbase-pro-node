@@ -57,6 +57,36 @@ export interface CoinbaseAccount {
   wire_deposit_information?: WireDepositInformation;
 }
 
+export interface GeneratedAddress {
+  address: string;
+  address_info: AddressInfo;
+  callback_url?: string;
+  created_at: Date;
+  deposit_uri?: string;
+  destination_tag?: string;
+  exchange_deposit_address: boolean;
+  id: string;
+  legacy_address?: string;
+  name: string;
+  network: string;
+  resource: string;
+  resource_path: string;
+  updated_at: Date;
+  uri_scheme: string;
+  warnings: Warning[];
+}
+
+export interface AddressInfo {
+  address: string;
+  destination_tag?: string;
+}
+
+export interface Warning {
+  details: string;
+  image_url: string;
+  title: string;
+}
+
 export interface WireDepositInformation {
   account_address: string;
   account_name: string;
@@ -97,7 +127,7 @@ export class AccountAPI {
    * Get information for a single account. API key must belong to the same profile as the account.
    *
    * @param accountId - Account ID belonging to the API key’s profile
-   * @see https://docs.pro.coinbase.com/#get-an-account
+   * @see https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccount
    */
   async getAccount(accountId: string): Promise<Account> {
     const resource = `${AccountAPI.URL.ACCOUNTS}/${accountId}`;
@@ -111,7 +141,7 @@ export class AccountAPI {
    *
    * @param accountId - Account ID belonging to the API key’s profile
    * @param pagination - Pagination field
-   * @see https://docs.pro.coinbase.com/#get-account-history
+   * @see https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccountledger
    */
   async getAccountHistory(accountId: string, pagination?: Pagination): Promise<PaginatedData<AccountHistory>> {
     const resource = `${AccountAPI.URL.ACCOUNTS}/${accountId}/ledger`;
@@ -132,7 +162,7 @@ export class AccountAPI {
    *
    * @param accountId - Account ID belonging to the API key’s profile
    * @param pagination - Pagination field
-   * @see https://docs.pro.coinbase.com/#get-holds
+   * @see https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccountholds
    */
   async getHolds(accountId: string, pagination?: Pagination): Promise<PaginatedData<Hold>> {
     const resource = `${AccountAPI.URL.ACCOUNTS}/${accountId}/holds`;
@@ -149,7 +179,7 @@ export class AccountAPI {
   /**
    * Get a list of trading accounts from the profile of the API key.
    *
-   * @see https://docs.pro.coinbase.com/#list-accounts
+   * @see https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getaccounts
    */
   async listAccounts(): Promise<Account[]> {
     const resource = AccountAPI.URL.ACCOUNTS;
@@ -160,11 +190,22 @@ export class AccountAPI {
   /**
    * Get a list of your coinbase accounts.
    *
-   * @see https://docs.pro.coinbase.com/#coinbase-accounts
+   * @see https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getcoinbaseaccounts
    */
   async listCoinbaseAccounts(): Promise<CoinbaseAccount[]> {
     const resource = AccountAPI.URL.COINBASE_ACCOUNT;
     const response = await this.apiClient.get<CoinbaseAccount[]>(resource);
+    return response.data;
+  }
+
+  /**
+   * Generate a new deposit address for a given account.
+   *
+   * @see https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_postcoinbaseaccountaddresses
+   */
+  async generateDepositAddress(accountId: string): Promise<GeneratedAddress> {
+    const resource = `${AccountAPI.URL.COINBASE_ACCOUNT}/${accountId}/addresses`;
+    const response = await this.apiClient.post<GeneratedAddress>(resource);
     return response.data;
   }
 }
