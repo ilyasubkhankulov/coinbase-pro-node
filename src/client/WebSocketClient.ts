@@ -376,7 +376,7 @@ export class WebSocketClient extends EventEmitter {
    *
    * @param reconnectOptions - Reconnect options to be used with the "reconnecting-websocket" package. Note: Options
    *   will be merged with sensible default values.
-   * @see https://docs.cloud.coinbase.com/exchange/docs/websocket-overview
+   * @see https://docs.pro.coinbase.com/#websocket-feed
    */
   connect(reconnectOptions?: Options): ReconnectingWebSocket {
     if (this.socket) {
@@ -481,11 +481,15 @@ export class WebSocketClient extends EventEmitter {
   }
 
   async sendMessage(message: WebSocketRequest): Promise<void> {
+    if (!this.socket) {
+      throw new Error(`Failed to send message of type "${message.type}": You need to connect to the WebSocket first.`);
+    }
+
     /**
      * Authentication will result in a couple of benefits:
      * 1. Messages where you're one of the parties are expanded and have more useful fields
      * 2. You will receive private messages, such as lifecycle information about stop orders you placed
-     * @see https://docs.cloud.coinbase.com/exchange/docs/websocket-overview#subscribe
+     * @see https://docs.pro.coinbase.com/#subscribe
      */
     const signature = await this.signRequest({
       httpMethod: 'GET',
@@ -494,22 +498,18 @@ export class WebSocketClient extends EventEmitter {
     });
     Object.assign(message, signature);
 
-    if (!this.socket) {
-      throw new Error(`Failed to send message of type "${message.type}": You need to connect to the WebSocket first.`);
-    }
-
     this.socket.send(JSON.stringify(message));
   }
 
-  async subscribe(channel: WebSocketChannel | WebSocketChannel[]): Promise<void> {
-    await this.sendMessage({
+  subscribe(channel: WebSocketChannel | WebSocketChannel[]): void {
+    this.sendMessage({
       channels: Array.isArray(channel) ? channel : [channel],
       type: WebSocketRequestType.SUBSCRIBE,
     }).finally(() => {});
   }
 
-  async unsubscribe(channel: WebSocketChannelName | WebSocketChannel | WebSocketChannel[]): Promise<void> {
-    await this.sendMessage({
+  unsubscribe(channel: WebSocketChannelName | WebSocketChannel | WebSocketChannel[]): void {
+    this.sendMessage({
       channels: this.mapChannels(channel),
       type: WebSocketRequestType.UNSUBSCRIBE,
     }).finally(() => {});
@@ -531,7 +531,7 @@ export class WebSocketClient extends EventEmitter {
     }
 
     /**
-     * Enforce reconnect when not receiving any 'pong' from Coinbase Pro in time.
+     * Enforce a reconnect when not receiving any 'pong' from Coinbase Pro in time.
      * @see https://github.com/bennycode/coinbase-pro-node/issues/374
      */
     this.pongTimeout = setTimeout(this.onPongTimeout.bind(this), this.pongTime);

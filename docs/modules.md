@@ -43,7 +43,6 @@
 - [Account](interfaces/Account.md)
 - [AccountHistory](interfaces/AccountHistory.md)
 - [AccountHistoryDetails](interfaces/AccountHistoryDetails.md)
-- [AddressInfo](interfaces/AddressInfo.md)
 - [AutoCancelLimitOrder](interfaces/AutoCancelLimitOrder.md)
 - [BaseHistoricRateRequest](interfaces/BaseHistoricRateRequest.md)
 - [Candle](interfaces/Candle.md)
@@ -59,7 +58,6 @@
 - [Fill](interfaces/Fill.md)
 - [FilledOrder](interfaces/FilledOrder.md)
 - [FundTransfer](interfaces/FundTransfer.md)
-- [GeneratedAddress](interfaces/GeneratedAddress.md)
 - [HistoricRateRequestWithTimeSpan](interfaces/HistoricRateRequestWithTimeSpan.md)
 - [Hold](interfaces/Hold.md)
 - [LimitOrder](interfaces/LimitOrder.md)
@@ -79,7 +77,6 @@
 - [Trade](interfaces/Trade.md)
 - [TrailingVolume](interfaces/TrailingVolume.md)
 - [VerifiedUser](interfaces/VerifiedUser.md)
-- [Warning](interfaces/Warning.md)
 - [WebSocketChannel](interfaces/WebSocketChannel.md)
 - [WebSocketErrorMessage](interfaces/WebSocketErrorMessage.md)
 - [WebSocketFullActivateMessage](interfaces/WebSocketFullActivateMessage.md)
@@ -115,7 +112,7 @@
 
 #### Defined in
 
-[CoinbasePro.ts:26](https://github.com/bennycode/coinbase-pro-node/blob/7770f03/src/CoinbasePro.ts#L26)
+[CoinbasePro.ts:26](https://github.com/bennycode/coinbase-pro-node/blob/208278f/src/CoinbasePro.ts#L26)
 
 ---
 
@@ -125,7 +122,7 @@
 
 #### Defined in
 
-[product/ProductAPI.ts:82](https://github.com/bennycode/coinbase-pro-node/blob/7770f03/src/product/ProductAPI.ts#L82)
+[product/ProductAPI.ts:82](https://github.com/bennycode/coinbase-pro-node/blob/208278f/src/product/ProductAPI.ts#L82)
 
 ---
 
@@ -135,7 +132,7 @@
 
 #### Defined in
 
-[order/OrderAPI.ts:77](https://github.com/bennycode/coinbase-pro-node/blob/7770f03/src/order/OrderAPI.ts#L77)
+[order/OrderAPI.ts:77](https://github.com/bennycode/coinbase-pro-node/blob/208278f/src/order/OrderAPI.ts#L77)
 
 ---
 
@@ -145,7 +142,7 @@
 
 #### Defined in
 
-[order/OrderAPI.ts:57](https://github.com/bennycode/coinbase-pro-node/blob/7770f03/src/order/OrderAPI.ts#L57)
+[order/OrderAPI.ts:57](https://github.com/bennycode/coinbase-pro-node/blob/208278f/src/order/OrderAPI.ts#L57)
 
 ---
 
@@ -155,7 +152,7 @@
 
 #### Defined in
 
-[order/OrderAPI.ts:106](https://github.com/bennycode/coinbase-pro-node/blob/7770f03/src/order/OrderAPI.ts#L106)
+[order/OrderAPI.ts:106](https://github.com/bennycode/coinbase-pro-node/blob/208278f/src/order/OrderAPI.ts#L106)
 
 ---
 
@@ -165,7 +162,7 @@
 
 #### Defined in
 
-[product/ProductAPI.ts:133](https://github.com/bennycode/coinbase-pro-node/blob/7770f03/src/product/ProductAPI.ts#L133)
+[product/ProductAPI.ts:133](https://github.com/bennycode/coinbase-pro-node/blob/208278f/src/product/ProductAPI.ts#L133)
 
 ---
 
@@ -175,7 +172,7 @@
 
 #### Defined in
 
-[client/WebSocketClient.ts:280](https://github.com/bennycode/coinbase-pro-node/blob/7770f03/src/client/WebSocketClient.ts#L280)
+[client/WebSocketClient.ts:280](https://github.com/bennycode/coinbase-pro-node/blob/208278f/src/client/WebSocketClient.ts#L280)
 
 ---
 
@@ -185,4 +182,4 @@
 
 #### Defined in
 
-[client/WebSocketClient.ts:125](https://github.com/bennycode/coinbase-pro-node/blob/7770f03/src/client/WebSocketClient.ts#L125)
+[client/WebSocketClient.ts:125](https://github.com/bennycode/coinbase-pro-node/blob/208278f/src/client/WebSocketClient.ts#L125)

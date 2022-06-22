@@ -18,11 +18,11 @@ const channels = [
   },
 ];
 
-client.ws.on(WebSocketEvent.ON_OPEN, async () => {
-  await client.ws.subscribe(channels);
+client.ws.on(WebSocketEvent.ON_OPEN, () => {
+  client.ws.subscribe(channels);
 });
 
-client.ws.on(WebSocketEvent.ON_SUBSCRIPTION_UPDATE, async subscriptions => {
+client.ws.on(WebSocketEvent.ON_SUBSCRIPTION_UPDATE, subscriptions => {
   const subscriptionCount = subscriptions.channels.length;
   const uniqueProductIds = new Set();
   const productIds = subscriptions.channels.map(subscription => subscription.product_ids);
@@ -40,15 +40,15 @@ client.ws.on(WebSocketEvent.ON_SUBSCRIPTION_UPDATE, async subscriptions => {
       break;
     case 1:
       console.info(`We will unsubscribe from "${WebSocketChannelName.LEVEL2}" channel...`);
-      await client.ws.unsubscribe(WebSocketChannelName.LEVEL2);
+      client.ws.unsubscribe(WebSocketChannelName.LEVEL2);
       break;
     case 2:
       console.info(`We will unsubscribe from "${WebSocketChannelName.HEARTBEAT}" channel...`);
-      await client.ws.unsubscribe(WebSocketChannelName.HEARTBEAT);
+      client.ws.unsubscribe(WebSocketChannelName.HEARTBEAT);
       break;
     case 3:
       console.info(`We will unsubscribe from "${WebSocketChannelName.TICKER}" channel...`);
-      await client.ws.unsubscribe(WebSocketChannelName.TICKER);
+      client.ws.unsubscribe(WebSocketChannelName.TICKER);
       break;
   }
 });

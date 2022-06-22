@@ -3,10 +3,12 @@ import nock from 'nock';
 import {TimeAPI} from '../../time/TimeAPI';
 
 declare global {
-  /* eslint-disable no-var */
-  var client: CoinbasePro;
-  var REST_URL: string;
-  /* eslint-enable no-var */
+  module NodeJS {
+    interface Global {
+      client: CoinbasePro;
+      REST_URL: string;
+    }
+  }
 }
 
 // URL to mock a server using "nock":
